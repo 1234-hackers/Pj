@@ -1,0 +1,63 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Transition</title>
+  <style>
+    .image-container {
+      width: 300px; /* Adjust width as needed */
+      overflow: hidden; /* Hide overflowing images */
+      white-space: nowrap; /* Prevent line breaks between images */
+    }
+
+    .image {
+      display: inline-block;
+      width: 100%;
+      transition: transform 1s ease-in-out; /* Smooth transition */
+    }
+
+    .image:first-child {
+      transform: translateX(0);
+    }
+
+    .image:nth-child(2) {
+      transform: translateX(100%); /* Offset second image */
+    }
+
+    .image:nth-child(3) {
+      transform: translateX(200%); /* Offset third image */
+    }
+
+    .active {
+      transform: translateX(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="image-container">
+    <img  src="{{ url_for('static', filename='/imgs/logo.png') }}"  class="image">
+
+<img  src="{{ url_for('static', filename='/imgs/logo.png') }}"  class="image">
+
+<img  src="{{ url_for('static', filename='/imgs/logo.png') }}"  class="image">
+
+  </div>
+  <script>
+    const images = document.querySelectorAll(".image");
+    let currentImage = 0;
+
+    function transitionImages() {
+      images[currentImage].classList.remove("active");
+      currentImage = (currentImage + 1) % images.length;
+      images[currentImage].classList.add("active");
+    }
+
+    setInterval(transitionImages, 1000); // Change images every second
+
+    images[0].classList.add("active"); // Start from first image
+  </script>
+</body>
+</html>
