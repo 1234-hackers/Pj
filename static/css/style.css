@@ -6,16 +6,25 @@
     }
 
 
+.waka2{
+ 	    margin-left:40px;
+            font-family: Arial, sans-serif;
+            font-size: 28px;
+            color: #333;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-style: italic;
+	    color:#F9D949;
+        }
 .waka{
- 	    margin-left:100px;
+            margin-left:100px;
             font-family: Arial, sans-serif;
             font-size: 34px;
             color: #333;
             text-transform: uppercase;
             text-decoration: none;
-	    color:yellow;
+            color:blue;
         }
-
 .install-notification {
       position: fixed;
       bottom: 20px;

@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Random Number Selector</title>
+<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+<title>Triple Threat</title>
+
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -26,7 +29,7 @@
     }
 </style>
 </head>
-<body>
+<body class="bd">
 
 
 
@@ -37,6 +40,18 @@
 
 </div>
 
+<div class="site_pic">
+        <label>
+           <a class="side_menu_items" href="{{ url_for('home') }}">
+            <title>Tripple Threat</title>
+                <image class="lks"  src="{{url_for('static',filename = '/imgs/logof.jpg')}}" >
+                </a>
+
+          </label>
+          <br>
+          <h1 class="waka2"> Tripple Threat</h1>
+      </div>
+
 <style>
     .balls {
         border-radius: 50%;
@@ -45,13 +60,15 @@
     }
 </style>
 
+<div class="play">
 
-<img class="balls" name="slide" id="banner">
+<img src="{{ url_for('static', filename='imgs/one.png') }}" class="balls" name="slide" id="banner">
+
+</div>
+
+<button onclick="startS()"type="button" class="playbutton"> PLAY </button>
 
 <script>
-
-
-
 
 var i = 0;
 var img = [];
@@ -82,12 +99,16 @@ function img_change() {
     }
 }
 
-var intervalId = setInterval(img_change, time);
-window.onload = img_change;
-
+function startS() {
+            var intervalId = setInterval(img_change, time);
+       
+setTimeout(function() {
+    location.reload();
+}, 3500);
+setTimeout()
+ }
 
 
 </script>
-
 </body>
 </html>
