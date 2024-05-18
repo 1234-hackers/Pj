@@ -176,6 +176,7 @@ def login():
                         return redirect(url_for('feed'))
     return render_template('login.html')
 
+
 @application.route('/reset_pass/', methods = ['POST','GET'])
 def  reset_pass():
     reset_db = client.flaka.pass_reset
@@ -198,8 +199,9 @@ def  reset_pass():
         else:
             return redirect(url_for('register'))
     return render_template('reset_pass.html')
-@application.route('/enter_code/' , methods = ['POST','GET'])
 
+
+@application.route('/enter_code/' , methods = ['POST','GET'])
 def enter_code():
     email = session['rset']
     if "x" =="x":
@@ -349,6 +351,7 @@ def register():
 
     return render_template('register.html')
 
+
 @application.route('/complete_regist' , methods = ['POST' , 'GET'])
 def complete_regist():
     user_email = session['login_user']
@@ -369,6 +372,20 @@ def complete_regist():
             return redirect(url_for('register'))
 
     return render_template('verif_reg.html' , m = user_email)
+
+
+
+@application.route('/profile/' , methods = ['POST','GET'])
+@login_required
+def profile():
+    trend = client.flaka.trending
+    me = session['login_user']
+    me2 = me.replace("." , "")
+    the_arr = ["electric car" , "rap" , "football"]
+    acc = users.find_one({"email" : me})
+
+    return render_template('profile.html' , me = me  )
+
 
 
 

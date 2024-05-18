@@ -40,16 +40,6 @@
 
 </div>
 
-<div class="balance"> 
-Bronze 500
-<br>
-Silver 100
-<br>
-Gold  40
-
-
-</div>
-
 <div class="site_pic">
         <label>
            <a class="side_menu_items" href="{{ url_for('home') }}">
@@ -69,12 +59,21 @@ Gold  40
 	height:400px;
     }
 
+
+
+.scrolling-names {
+    height: 100px; /* Set the height of the scrolling container */
+    overflow: hidden; /* Hide overflowing content */
+    position: relative;
+}
+
 #name-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
+
     position: absolute;
-    animation: scroll 3s linear infinite; /* Adjust the duration as needed */
+    animation: scroll 40s linear infinite; /* Adjust the duration as needed */
 }
 
 @keyframes scroll {
@@ -86,10 +85,6 @@ Gold  40
     }
 }
 
-  #gh.clicked {
-        background-color: red; /* Grey */
-        cursor: not-allowed;
-    }
 
 </style>
 
@@ -99,22 +94,15 @@ Gold  40
 
 </div>
 
-<div class="btbs">
-
-<button onclick="startS()"type="button" id="gh" class="playbutton"> 1 </button>
-
-<button onclick="startS()"type="button" id="gh" class="playbutton1"> 2 </button>
-
-<button onclick="startS()"type="button" id="gh" class="playbutton2"> 3 </button>
-</div>
+<button onclick="startS()"type="button" class="playbutton"> PLAY </button>
 
     <div class="scrolling-names">
         <ul id="name-list">
-            <li>John Mark ................ 300 🪙</li>
-            <li>Alice twice</li>
-            <li>Bob merly</li>
-            <li>Emily sheldon</li>
-            <li>Michael jordan</li>
+            <li>John</li>
+            <li>Alice</li>
+            <li>Bob</li>
+            <li>Emily</li>
+            <li>Michael</li>
         </ul>
     </div>
 
@@ -154,15 +142,20 @@ function img_change() {
 
 function startS() {
             var intervalId = setInterval(img_change, time);
-
-button.disabled = true;
        
 setTimeout(function() {
     location.reload();
 }, 3500);
-
 setTimeout()
  }
+
+// Get the list element
+const nameList = document.getElementById('name-list');
+
+// Duplicate the list items to create a continuous scrolling effect
+const nameListClone = nameList.cloneNode(true);
+nameList.appendChild(nameListClone);
+
 
 
 </script>
