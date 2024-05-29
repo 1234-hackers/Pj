@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX with jQuery and Flask</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>AJAX with jQuery and Flask</h1>
+    
+    <div class="play">
+        <img src="{{ url_for('static', filename='imgs/one.png') }}" class="balls" name="slide" id="banner">
+    </div>
+
+    <div class="btbs">
+        <form method="POST" action="{{ url_for('home') }}">
+            <input type="hidden" name="email" value="{{mp.ln}}"/>
+            <input type="hidden" name="name" value="{{mp.ln}}"/>
+
+            <button type="button" class="playbutton" data-value="1" onclick="startS()">1</button>
+            <button type="button" class="playbutton" data-value="2" onclick="startS()">2</button>
+            <button type="button" class="playbutton" data-value="3" onclick="startS()">3</button>
+        </form>
+    </div>
+
+    <script>
+        function startS() {
+            console.log('startS function executed');
+            // Your logic for startS function
+        }
+
+        function anotherFunction() {
+            console.log('anotherFunction executed');
+            // Your logic for anotherFunction
+        }
+
+        $(document).ready(function() {
+            $('.playbutton').on('click', function() {
+                // Call both functions
+                startS();
+                anotherFunction();
+
+                // Gather form data
+                const formData = {
+                    name: $('input[name="name"]').val(),
+                    email: $('input[name="email"]').val(),
+                    buttonValue: $(this).data('value')  // Retrieve the data-value attribute
+                };
+
+                // Make AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: '/home',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        console.log('Success:', response);
+                        alert('Data submitted successfully!');
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

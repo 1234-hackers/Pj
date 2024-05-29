@@ -40,13 +40,13 @@ from markupsafe import escape , Markup
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 
-
+import secrets
 import os
 
 
 uri = "mongodb+srv://jackson:mutamuta@hbcall.ihz6j.azure.mongodb.net/test?retryWrites=true&w=majority" 
  # Create a new client and connect to the server
-#client = MongoClient(uri, server_api=ServerApi('1'))
+client = MongoClient(uri, server_api=ServerApi('1'))
 application = Flask(__name__)
 
 #captcha
@@ -62,25 +62,26 @@ SECRET_KEY = "dsfdsjgdjgdfgdfgjdkjgdg"
 csrf = CSRFProtect(application)
 
 #mongoDB configs
-application.config['MONGO_DBNAME'] = 'users'
+#application.config['MONGO_DBNAME'] = 'users'
 # application.config['MONGO_URI'] = 'mongodb://'+ipst+':27017/users'
-application.config['MONGO_URI'] = 'mongodb://localhost:27017/main'
+#application.config['MONGO_URI'] = 'mongodb://localhost:27017/main'
 
-mongo = PyMongo(application)
+#mongo = PyMongo(application)
+
 
 application.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 
 Hash_passcode = CryptContext(schemes=["sha256_crypt" ,"des_crypt"],sha256_crypt__min_rounds=131072)
 
-mongo = PyMongo(application)
+#mongo = PyMongo(application)
 
-'''users = client.bet.users
+users = client.bet.users
+pools = client.bet.pool_tables
 verif = client.bet.verify_email
 ips = client.bet.ips
 dates = client.bet.dates
 
 
-'''
 def login_required(f):
     @wraps(f)
     def wrap(*args,**kwargs):
@@ -133,14 +134,70 @@ this wasn't you please ignore it.
 
 @application.route('/',methods = ["POST","GET"])
 def home():
-     dag = 67
+     gh=[]
+     b_id =  secrets.token_hex(13)
+     bid = secrets.token_hex(12)
+     dag = 5
+     jmp = [bid]
+     now = dt.now()
+     now_c = now.strftime(" %Y:%m:%d ")
+     timez = now_c
+     result = []
+     for num in range(1300, 1750 + 1):
+          if num % 7 == 0 and num % 3 != 0 and num % 5 != 0:
+               ks = result + [num*458]
+     for num in range(1300, 1750 + 1):
+          if num % 3 == 0 and num % 7 != 0 and num % 5 != 0:
+               ks2 = ks + [num*458]
+
+     for num in range(1300, 1750 + 1):
+          if num % 5 == 0 and num % 3 != 0 and num % 7 != 0:
+               k3 = ks2 + [num*458]
+
+     #div = result
+     div = random.choice(k3)
+     poolz =len(list( pools.find({"day":timez}) ))
+     if poolz <  5:
+          pools.insert_one({"p_num" : random.randint(345849,5838392) , "ln":div,
+          "player":jmp,"day": timez  })
+          poolzy = pools.find({"day":timez})
+          for x in poolzy:
+               gh.append(x)
+          my_pool = gh[random.randint(0,len(gh)-1)]
+          uden = my_pool["p_num"]
+          depz = pools.find_one({"p_num":uden})
+          depo = depz["player"]
+          new_arr = depo + [b_id]
+          pools.find_one_and_update({"p_num": uden}, {'$set': {"player": new_arr}})
+
+
+     else:
+          pool = pools.find({})
+          for x in pool:
+               gh.append(x)
+          my_pool = gh[random.randint(0,len(gh) -1)]
+          uden = my_pool["p_num"]
+          depz = pools.find_one({"p_num":uden})
+          depo = depz["player"]
+          new_arr = depo + [b_id]
+          pools.find_one_and_update({"p_num": uden}, {'$set': {"player": new_arr}})
+
+
+
+     if request.method == "POST":
+          dat = request.get_json()
+
+
+     return render_template('play2.html', mp = my_pool)
+
+'''
+
      user_ip = request.remote_addr
-     '''
      response = requests.get(f"https://ipinfo.io/{user_ip}")
      data = response.json()
      city = data.get('city', '')
      region = data.get('region', '')
-     country = 'kenya'
+     country = data.grt('country','')
      dag = ips.find_one({"ip":user_ip})
 
      if not dag:
@@ -148,10 +205,11 @@ def home():
      else:
           new_val = dag["revisit"] + 1
           ips.find_one_and_update({"ip" : user_ip} ,{ '$set' :  {"revisit": new_val}} )
-     '''
-     return render_template('play2.html')
 
 
+     return render_template('play2.html', mp = my_pool)
+
+'''
 
 @application.route('/login/' , methods = ['POST','GET'])
 def login():

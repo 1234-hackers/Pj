@@ -97,17 +97,19 @@ Gold  40
 
 </style>
 
-<script>
 
- const formData = {
+    <script>
+        $(document).ready(function() {
+            $('#gh').on('click', function() {
+                const formData = {
                     name: $('#name').val(),
-                    email: $('#email').val(),
-                    buttonValue: $(this).data('value')  // Retrieve the data-value attribute
+                    email: $('#email').val()
+      		    buttonValue: $(this).data('value')
                 };
 
                 $.ajax({
                     type: 'POST',
-                    url: '/home',
+                    url: '/submit',
                     contentType: 'application/json',
                     data: JSON.stringify(formData),
                     success: function(response) {
@@ -121,10 +123,7 @@ Gold  40
                 });
             });
         });
-
     </script>
-
-
 
 
 <div class="play">
@@ -133,18 +132,24 @@ Gold  40
 
 </div>
 
-
-
 <div class="btbs">
-        <form method="POST" action="{{ url_for('home') }}">
-            <input type="hidden" name="email" value="{{mp.ln}}"/>
-            <input type="hidden" name="name" value="{{mp.ln}}"/>
 
-            <button type="button"  onclick="startS()" id="gh" class="playbutton" value="1">1</button>
-            <button type="button" onclick="startS()"  id="gh" class="playbutton1" value="2">2</button>
-            <button type="button" onclick="startS()" id="gh" class="playbutton2" value="3">3</button>
-        </form>
-    </div>
+<form method="POST" action="{{ url_for('home') }}" >
+
+<input type="hidden" name="email" value="{{mp.ln }}"/>
+
+<input type="hidden" name="name" value="{{mp.ln }}"/>
+
+
+
+<button onclick="startS()"type="button" id="gh" value="1"  class="playbutton"> 1 </button>
+
+<button onclick="startS()"type="button" id="gh" value="1" class="playbutton1"> 2 </button>
+
+<button onclick="startS()"type="button" id="gh" value="1"  class="playbutton2"> 3 </button>
+
+</form>
+</div>
 
     <div class="scrolling-names">
         <ul id="name-list">
@@ -155,8 +160,6 @@ Gold  40
             <li>Michael jordan</li>
         </ul>
     </div>
-
-
 
 
 
@@ -197,7 +200,7 @@ var i = 0;
 var img = [];
 var time = 100;
 var startTime = Date.now();
-var stopTime = startTime + 3000; // Set stop time 30 seconds ahead
+var stopTime = startTime + 30; // Set stop time 30 seconds ahead
 var stopImageIndex = 2; // Set the index of the image to be displayed after 30 seconds
 var nosy = {{mp.ln}} / 458
 img[0] = "{{ url_for('static', filename='imgs/one.png') }}";
@@ -227,15 +230,8 @@ function startS() {
             var intervalId = setInterval(img_change, time);
 
 button.disabled = true;
-       
-setTimeout(function() {
-    location.reload();
-}, 3500);
-
-setTimeout()
-
- }
-
+   
+location.reload();
 
 </script>
 </body>
