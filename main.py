@@ -133,6 +133,7 @@ this wasn't you please ignore it.
 
 
 @application.route('/',methods = ["POST","GET"])
+@login_required
 def home():
      gh=[]
      b_id =  secrets.token_hex(13)
@@ -210,6 +211,84 @@ def home():
      return render_template('play2.html', mp = my_pool)
 
 '''
+
+
+@application.route('/login/' , methods = ['POST','GET'])
+@login_required
+def feed():
+     gh=[]
+     b_id =  secrets.token_hex(13)
+     bid = secrets.token_hex(12)
+     dag = 5
+     jmp = [bid]
+     now = dt.now()
+     now_c = now.strftime(" %Y:%m:%d ")
+     timez = now_c
+     result = []
+     for num in range(1300, 1750 + 1):
+          if num % 7 == 0 and num % 3 != 0 and num % 5 != 0:
+               ks = result + [num*458]
+     for num in range(1300, 1750 + 1):
+          if num % 3 == 0 and num % 7 != 0 and num % 5 != 0:
+               ks2 = ks + [num*458]
+
+     for num in range(1300, 1750 + 1):
+          if num % 5 == 0 and num % 3 != 0 and num % 7 != 0:
+               k3 = ks2 + [num*458]
+
+     #div = result
+     div = random.choice(k3)
+     poolz =len(list( pools.find({"day":timez}) ))
+     if poolz <  5:
+          pools.insert_one({"p_num" : random.randint(345849,5838392) , "ln":div,
+          "player":jmp,"day": timez  })
+          poolzy = pools.find({"day":timez})
+          for x in poolzy:
+               gh.append(x)
+          my_pool = gh[random.randint(0,len(gh)-1)]
+          uden = my_pool["p_num"]
+          depz = pools.find_one({"p_num":uden})
+          depo = depz["player"]
+          new_arr = depo + [b_id]
+          pools.find_one_and_update({"p_num": uden}, {'$set': {"player": new_arr}})
+
+
+     else:
+          pool = pools.find({})
+          for x in pool:
+               gh.append(x)
+          my_pool = gh[random.randint(0,len(gh) -1)]
+          uden = my_pool["p_num"]
+          depz = pools.find_one({"p_num":uden})
+          depo = depz["player"]
+          new_arr = depo + [b_id]
+          pools.find_one_and_update({"p_num": uden}, {'$set': {"player": new_arr}})
+     return render_template('play2.html', mp = my_pool)
+
+'''
+
+     user_ip = request.remote_addr
+     response = requests.get(f"https://ipinfo.io/{user_ip}")
+     data = response.json()
+     city = data.get('city', '')
+     region = data.get('region', '')
+     country = data.grt('country','')
+     dag = ips.find_one({"ip":user_ip})
+
+     if not dag:                                                                                                                                        ips.insert_one({"city":city,"country":country,"ip":user_ip,"revisit":0})
+     else:
+          new_val = dag["revisit"] + 1
+          ips.find_one_and_update({"ip" : user_ip} ,{ '$set' :  {"revisit": new_val}} )
+
+
+     return render_template('play2.html', mp = my_pool)
+
+'''
+
+
+
+
+
 
 @application.route('/login/' , methods = ['POST','GET'])
 def login():

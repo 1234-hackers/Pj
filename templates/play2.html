@@ -97,35 +97,6 @@ Gold  40
 
 </style>
 
-<script>
-
- const formData = {
-                    name: $('#name').val(),
-                    email: $('#email').val(),
-                    buttonValue: $(this).data('value')  // Retrieve the data-value attribute
-                };
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/home',
-                    contentType: 'application/json',
-                    data: JSON.stringify(formData),
-                    success: function(response) {
-                        console.log('Success:', response);
-                        alert('Data submitted successfully!');
-                    },
-                    error: function(error) {
-                        console.log('Error:', error);
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            });
-        });
-
-    </script>
-
-
-
 
 <div class="play">
 
@@ -136,7 +107,7 @@ Gold  40
 
 
 <div class="btbs">
-        <form method="POST" action="{{ url_for('home') }}">
+        <form method="POST" action="{{ url_for('home') }}" id="name_form"  >
             <input type="hidden" name="email" value="{{mp.ln}}"/>
             <input type="hidden" name="name" value="{{mp.ln}}"/>
 
@@ -188,6 +159,34 @@ createNotification()
 }
 
 
+$('#name_form').submit(function(e) {
+                    e.preventDefault();
+
+
+                    var Form = this;
+                    data ={
+
+                    name: $('#name').val(),
+                    email: $('#email').val(),
+                };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/say_name',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(data),
+                        context: Form,
+                        success: function(callback) {
+                            console.log(callback);
+                            // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                            $(this).text('Hello ' + callback.first_name + ' ' + callback.last_name  + '!');
+                        },
+                        error: function() {
+                            $(this).html("error!");                                                                                          >
+                    });
+                });
+
     </script>
 
 
@@ -206,6 +205,7 @@ img[2] = "{{ url_for('static', filename='imgs/two.jpeg') }}";
 
 
 function img_change() {
+
     var currentTime = Date.now();
     
     // Check if current time exceeds stop time
@@ -238,5 +238,7 @@ setTimeout()
 
 
 </script>
+
+
 </body>
 </html>
