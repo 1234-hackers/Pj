@@ -93,17 +93,6 @@ def login_required(f):
     return wrap
 
 
-def handle_csrf_error(f):
-    @wraps(f)
-    def wrap(*args,**kwargs):
-        if not f == "":
-            return render_template('index.html', error=f), 400
-        else:
-            time.sleep(2)
-            return redirect(url_for('home'))
-    return wrap
-
-
 def send_mail(rec,code):
     recipient = rec
     code = code
@@ -131,9 +120,23 @@ this wasn't you please ignore it.
     os.system(full_email)
     return 'ok'
 
+@application.route('/rec',methods = ["POST"])
+def rec():
+     if request.method == 'POST':
+          dt = request.form.get()
+          print(dt)
+
+     return "done"
+
+@application.route('/create_file', methods=["POST","GET"])
+def create_file():
+     if request.method == 'POST':
+          with open(f"{request.form.get('name')}.txt", "w") as f:
+               f.write('FILE CREATED AND SUCCESSFULL POST REQUEST!')
+     return render_template("index.html")
+
 
 @application.route('/',methods = ["POST","GET"])
-@login_required
 def home():
      gh=[]
      b_id =  secrets.token_hex(13)
@@ -189,7 +192,7 @@ def home():
           dat = request.get_json()
 
 
-     return render_template('play2.html', mp = my_pool)
+     return render_template('pl3.html', mp = my_pool)
 
 '''
 
@@ -213,8 +216,7 @@ def home():
 '''
 
 
-@application.route('/login/' , methods = ['POST','GET'])
-@login_required
+@application.route('/feed/' , methods = ['POST','GET'])
 def feed():
      gh=[]
      b_id =  secrets.token_hex(13)
@@ -517,15 +519,21 @@ def complete_regist():
 def profile():
     trend = client.flaka.trending
     me = session['login_user']
+    fl = me[0:6] + "****"
     me2 = me.replace("." , "")
     the_arr = ["electric car" , "rap" , "football"]
     acc = users.find_one({"email" : me})
 
-    return render_template('profile.html' , me = me  )
+    return render_template('profile.html' , me = fl  )
 
 
 
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     application.secret_key = "Fucddggdgdfdgdrer5677u"
-    application.run(debug = True , port = 5006)
+    application.run(
+        host='127.0.0.1',
+        port=5006,
+        debug=True
+    )

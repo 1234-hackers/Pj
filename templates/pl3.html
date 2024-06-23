@@ -1,0 +1,216 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+<title>Triple Threat</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        text-align: center;
+        margin-top: 50px;
+    }
+    #result {
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    .balls {
+        border-radius: 50%;
+        width: 400px;
+        height: 400px;
+    }
+    #name-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        animation: scroll 3s linear infinite;
+    }
+    @keyframes scroll {
+        from {
+            top: 0;
+        }
+        to {
+            top: -100%;
+        }
+    }
+    #gh.clicked {
+        background-color: red;
+        cursor: not-allowed;
+    }
+</style>
+</head>
+<body class="bd">
+<div class="container"></div>
+
+<div class="balance"> 
+Bronze 500
+<br>
+Silver 100
+<br>
+Gold 40
+</div>
+
+<div class="site_pic">
+    <label>
+        <a class="side_menu_items" href="{{ url_for('home') }}">
+            <title>Tripple Threat</title>
+            <img class="lks" src="{{ url_for('static', filename='/imgs/logof.jpg') }}">
+        </a>
+    </label>
+    <br>
+    {{ mp.ln }}
+    <h1 class="waka2">Tripple Threat</h1>
+</div>
+
+<div class="play">
+    <img src="{{ url_for('static', filename='imgs/one.png') }}" class="balls" name="slide" id="banner">
+</div>
+
+<div class="btbs">
+    
+	<div id="playForm"> 
+       <button type="button" id="myButton" onclick="handleAjaxSubmission(1)" class="playbutton" data-value="1">1</button>
+        <button type="button" id="myButton1"  onclick="handleAjaxSubmission(2)" class="playbutton1" data-value="2">2</button>
+        <button type="button" id="myButton2"  onclick="handleAjaxSubmission(3)" class="playbutton2" data-value="3">3</button>
+	<br>
+	<br>
+	<button type="button" onclick="handleButtonClick(5)" class="dapl" >Play</button>
+
+   </div>
+ 
+</div>
+
+<div class="scrolling-names">
+    <ul id="name-list">
+        <li>John Mark ................ 300 🪙</li>
+        <li>Alice twice</li>
+        <li>Bob merly</li>
+        <li>Emily sheldon</li>
+        <li>Michael jordan</li>
+    </ul>
+</div>
+
+<script>
+
+var i = 0;
+var img = [];
+var time = 100;
+var intervalId; // Define intervalId in the global scope
+var startTime;
+var stopTime;
+var stopImageIndex = 2; // Set the index of the image to be displayed after 3 seconds
+
+img[0] = "{{ url_for('static', filename='imgs/one.png') }}";
+img[1] = "{{ url_for('static', filename='imgs/three.jpeg') }}";
+img[2] = "{{ url_for('static', filename='imgs/two.jpeg') }}";
+
+function img_change() {
+    var currentTime = Date.now();
+
+    // Check if current time exceeds stop time
+    if (currentTime >= stopTime) {
+        clearInterval(intervalId); // Stop the interval
+        document.slide.src = img[stopImageIndex]; // Display the predetermined image
+        return; // Exit the function
+    }
+
+    document.slide.src = img[i];
+    if (i < img.length - 1) {
+        i++;
+    } else {
+        i = 0;
+    }
+}
+
+function startS(button) {
+    startTime = Date.now();
+    stopTime = startTime + 3000; // Set stop time 3 seconds ahead
+    intervalId = setInterval(img_change, time); // Assign intervalId
+
+    button.disabled = true;
+
+    setTimeout(function() {
+        location.reload();
+    }, 3500);
+}
+
+function handleButtonClick(buttonValue) {
+    var button = document.querySelector(`button[data-value="${buttonValue}"]`);
+    startS(button);
+}
+
+
+// JavaScript code goes here
+</script>
+
+<script>
+
+function handleAjaxSubmission(btN) {
+
+$.ajax({
+            type: "POST",
+            url: "{{ url_for('rec') }}",
+            data: {"name" : "Jim"},
+        })
+
+}
+
+
+</script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var button = document.getElementById("myButton");
+
+            button.addEventListener("click", function() {
+                // Change the button's color when clicked
+                button.style.backgroundColor = "black"; // New background color
+                button.style.color = "white"; // New text color (optional)
+            });
+        });
+    </script>
+
+
+
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var button = document.getElementById("myButton1");
+
+            button.addEventListener("click", function() {
+                // Change the button's color when clicked
+                button.style.backgroundColor = "black"; // New background color
+                button.style.color = "white"; // New text color (optional)
+            });
+        });
+    </script>7
+
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var button = document.getElementById("myButton2");
+
+            button.addEventListener("click", function() {
+                // Change the button's color when clicked
+                button.style.backgroundColor = "black"; // New background color
+                button.style.color = "white"; // New text color (optional)
+            });
+        });
+    </script>
+
+
+
+
+
+</body>
+</html>

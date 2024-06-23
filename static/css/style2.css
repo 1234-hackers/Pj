@@ -45,7 +45,18 @@ font-weight:bold;
 font-size:20px;																																																		
 }
 
-
+.dapl
+{
+margin-left:120px;
+color:blue;
+justify-content: center;
+width:100px;
+height:50px;
+background-color:black;
+border-radius:5px;
+font-weight:bold;
+font-size:20px;                                                                         >
+}
 
 
 .playbutton.clicked {
