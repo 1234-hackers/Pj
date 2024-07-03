@@ -10,25 +10,36 @@ margin-left: 30px;
 {
 color:blue;
 justify-content: center;
-width:100px;
+width:200px;
 height:50px;
 background-color:#F9D949;
 border-radius:5px;
 font-weight:bold;
 font-size:20px;
+
+padding: 10px 20px;
+margin: 5px;
+border: 1px solid #ccc;
+cursor: pointer;
+user-select: none;
+
 }
 
 .playbutton1
 {
-margin-left:10px;
-color:red;
-justify-content: center;
-width:100px;
-height:50px;
-background-color:blue;
-border-radius:5px;
+
+color:black;
 font-weight:bold;
 font-size:20px;
+
+border-radius:5px;
+padding: 10px 20px;
+margin: 5px;
+background-color: blue;
+border: 1px solid #ccc;
+cursor: pointer;
+user-select: none;
+
 }
 
 
@@ -42,12 +53,41 @@ height:50px;
 background-color:red;
 border-radius:5px;
 font-weight:bold;
-font-size:20px;																																																		
+font-size:20px;
+
+
+padding: 10px 20px;
+margin: 5px;
+border: 1px solid #ccc;
+cursor: pointer;
+user-select: none;
+
 }
+
+
+
+input[type="radio"]:checked + .playbutton {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+
+
+input[type="radio"]:checked + .playbutton1 {                                                         background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+input[type="radio"]:checked + .playbutton2 {                                                         background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
 
 .dapl
 {
-margin-left:120px;
+
+margin-left:50px;
 color:blue;
 justify-content: center;
 width:100px;
@@ -90,7 +130,7 @@ margin-top:5px;
 .btbs
 {
 margin-top:30px;
-margin-left:20%;
+margin-left:30%;
 display:flex;
 position: relative;
 font-weight:bold;

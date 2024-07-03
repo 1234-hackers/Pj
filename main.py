@@ -8,7 +8,7 @@ dns.resolver.default_resolver=dns.resolver.Resolver(configure=False)
 dns.resolver.default_resolver.nameservers=['8.8.8.8']
 
 from dns.message import Message
-from flask import Flask, render_template, url_for, request, redirect,flash,session
+from flask import Flask, render_template, url_for, request, redirect,flash,session,jsonify
 from flask.scaffold import F
 from flask_pymongo import PyMongo
 from flask_wtf.form import FlaskForm
@@ -136,6 +136,23 @@ def create_file():
      return render_template("index.html")
 
 
+@application.route('/new')
+def index():
+
+    return render_template('indexy.html')
+
+
+@application.route('/submit', methods=['POST'])
+def submit():
+    data = request.form.to_dict()
+    # Process the data as needed
+    response = {'message': 'Form data received successfully!', 'data': data}
+    print(response['data']['name'])
+    return jsonify(response)
+
+
+
+
 @application.route('/',methods = ["POST","GET"])
 def home():
      gh=[]
@@ -147,16 +164,7 @@ def home():
      now_c = now.strftime(" %Y:%m:%d ")
      timez = now_c
      result = []
-     for num in range(1300, 1750 + 1):
-          if num % 7 == 0 and num % 3 != 0 and num % 5 != 0:
-               ks = result + [num*458]
-     for num in range(1300, 1750 + 1):
-          if num % 3 == 0 and num % 7 != 0 and num % 5 != 0:
-               ks2 = ks + [num*458]
-
-     for num in range(1300, 1750 + 1):
-          if num % 5 == 0 and num % 3 != 0 and num % 7 != 0:
-               k3 = ks2 + [num*458]
+     k3 = [1,2,3]
 
      #div = result
      div = random.choice(k3)

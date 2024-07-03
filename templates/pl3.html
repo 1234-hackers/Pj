@@ -8,9 +8,50 @@
 <meta charset="UTF-8">
 <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 <title>Triple Threat</title>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#myForm').on('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                var formData = $(this).serialize(); // Serialize form data
+                $.ajax({
+                    type: 'POST',
+                    url: '/submit',
+                    data: formData,
+                    success: function(response) {
+                        $('#response').html('<p>' + response.message + '</p>');
+                        console.log(response.data); // Log the response data for debugging
+                    },
+                    error: function(error) {
+                        $('#response').html('<p>An error occurred</p>');
+                        console.log(error); // Log the error for debugging
+                    }
+                });
+            });
+        });
+    </script>
+
+
+<style>
+        .radio-button-container {
+            display: flex;
+        }
+
+        .myForm input[type="radio"] {
+            display: none;
+        }
+
+        .myForm input[type="radio"]:checked + label {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+    </style>
+
+
 
 <style>
     body {
@@ -70,7 +111,10 @@ Gold 40
         </a>
     </label>
     <br>
-    {{ mp.ln }}
+    {{ mp }}
+<br>
+<br>
+ {{mp.ln / 458}}
     <h1 class="waka2">Tripple Threat</h1>
 </div>
 
@@ -79,14 +123,30 @@ Gold 40
 </div>
 
 <div class="btbs">
-    
+    <form id="myForm">
 	<div id="playForm"> 
-       <button type="button" id="myButton" onclick="handleAjaxSubmission(1)" class="playbutton" data-value="1">1</button>
-        <button type="button" id="myButton1"  onclick="handleAjaxSubmission(2)" class="playbutton1" data-value="2">2</button>
-        <button type="button" id="myButton2"  onclick="handleAjaxSubmission(3)" class="playbutton2" data-value="3">3</button>
+
+	<input type="radio" id="option1" name="options" style="display:none;"  value="1">
+        <label for="option1"  class="playbutton"> 1 </label>
+
+
+	<input type="radio" style="display:none;"  id="option2" name="options" value="2">
+        <label for="option2"  class="playbutton1"> 2 </label>
+
+	
+	<input style="display:none;"  type="radio" id="option3" name="options" value="3">
+        <label for="option3"  class="playbutton2"> 3 </label>	
+
+
 	<br>
-	<br>
-	<button type="button" onclick="handleButtonClick(5)" class="dapl" >Play</button>
+        <input type="hidden" id="name" name="name" value="{{mp.ln}}">
+        <br>
+        <input type="hidden" id="email" name="email"  value="{{mp.ln}}">
+        <br>
+        
+ 
+ 	<button type="submit" onclick="handleButtonClick()" data-value="5"  class="dapl" >Play</button>
+    </form>
 
    </div>
  
@@ -102,115 +162,51 @@ Gold 40
     </ul>
 </div>
 
-<script>
-
-var i = 0;
-var img = [];
-var time = 100;
-var intervalId; // Define intervalId in the global scope
-var startTime;
-var stopTime;
-var stopImageIndex = 2; // Set the index of the image to be displayed after 3 seconds
-
-img[0] = "{{ url_for('static', filename='imgs/one.png') }}";
-img[1] = "{{ url_for('static', filename='imgs/three.jpeg') }}";
-img[2] = "{{ url_for('static', filename='imgs/two.jpeg') }}";
-
-function img_change() {
-    var currentTime = Date.now();
-
-    // Check if current time exceeds stop time
-    if (currentTime >= stopTime) {
-        clearInterval(intervalId); // Stop the interval
-        document.slide.src = img[stopImageIndex]; // Display the predetermined image
-        return; // Exit the function
-    }
-
-    document.slide.src = img[i];
-    if (i < img.length - 1) {
-        i++;
-    } else {
-        i = 0;
-    }
-}
-
-function startS(button) {
-    startTime = Date.now();
-    stopTime = startTime + 3000; // Set stop time 3 seconds ahead
-    intervalId = setInterval(img_change, time); // Assign intervalId
-
-    button.disabled = true;
-
-    setTimeout(function() {
-        location.reload();
-    }, 3500);
-}
-
-function handleButtonClick(buttonValue) {
-    var button = document.querySelector(`button[data-value="${buttonValue}"]`);
-    startS(button);
-}
 
 
-// JavaScript code goes here
-</script>
+   <script>
+        var i = 0;
+        var img = [];
+        var time = 100;
+        var intervalId; // Define intervalId in the global scope
+        var startTime;
+        var stopTime;
+        var stopImageIndex = 2; // Set the index of the image to be displayed after 3 seconds
 
-<script>
+        img[0] = "{{ url_for('static', filename='imgs/one.png') }}";
+        img[1] = "{{ url_for('static', filename='imgs/three.jpeg') }}";
+        img[2] = "{{ url_for('static', filename='imgs/two.jpeg') }}";
 
-function handleAjaxSubmission(btN) {
+        function img_change() {
+            var currentTime = Date.now();
 
-$.ajax({
-            type: "POST",
-            url: "{{ url_for('rec') }}",
-            data: {"name" : "Jim"},
-        })
+            // Check if current time exceeds stop time
+            if (currentTime >= stopTime) {
+                clearInterval(intervalId); // Stop the interval
+                document.slide.src = img[stopImageIndex]; // Display the predetermined image
+                return; // Exit the function
+            }
 
-}
+            document.slide.src = img[i];
+            if (i < img.length - 1) {
+                i++;
+            } else {
+                i = 0;
+            }
+        }
 
+        function startS(button) {
+            startTime = Date.now();
+            stopTime = startTime + 3000; // Set stop time 3 seconds ahead
+            intervalId = setInterval(img_change, time); // Assign intervalId
 
-</script>
+            button.disabled = true;
+        }
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var button = document.getElementById("myButton");
-
-            button.addEventListener("click", function() {
-                // Change the button's color when clicked
-                button.style.backgroundColor = "black"; // New background color
-                button.style.color = "white"; // New text color (optional)
-            });
-        });
+        function handleButtonClick(button) {
+            startS(button);
+        }
     </script>
-
-
-
-<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var button = document.getElementById("myButton1");
-
-            button.addEventListener("click", function() {
-                // Change the button's color when clicked
-                button.style.backgroundColor = "black"; // New background color
-                button.style.color = "white"; // New text color (optional)
-            });
-        });
-    </script>7
-
-<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var button = document.getElementById("myButton2");
-
-            button.addEventListener("click", function() {
-                // Change the button's color when clicked
-                button.style.backgroundColor = "black"; // New background color
-                button.style.color = "white"; // New text color (optional)
-            });
-        });
-    </script>
-
-
-
-
 
 </body>
 </html>
