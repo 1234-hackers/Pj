@@ -59,17 +59,6 @@ def login_required(f):
 
 
 
-
-
-
-
-@application.route('/')
-def index():
-    return render_template('indexy.html')
-
-
-
-
 @application.route('/submit', methods=['POST'])
 def submit():
     data = request.form.to_dict()
@@ -87,7 +76,7 @@ def submit():
 
 
 
-@application.route('/p',methods = ["POST","GET"])
+@application.route('/',methods = ["POST","GET"])
 def home():
      gh=[]
      b_id =  secrets.token_hex(13)
@@ -159,6 +148,149 @@ def home():
      return render_template('play2.html', mp = my_pool)
 
 '''
+
+
+@application.route('/login/' , methods = ['POST','GET'])
+def login():
+    if request.method == "POST":# and  hcaptcha.verify():
+        email = request.form['email']
+        existing_user  = users.find_one({'email':email} )
+        if existing_user:
+                passcode = request.form['passcode']
+                v = str(existing_user['verified'])
+
+                existing_pass = existing_user['password']
+                if Hash_passcode.verify(passcode,existing_pass):
+                    username = existing_user['email']
+                    if username in session:
+                        if v == '0' :
+                             return redirect(url_for('complete_regist'))
+                        else:
+                            return redirect(url_for('feed'))
+                    else:
+                        session.parmanent = True
+                        session['login_user'] = email
+                        return redirect(url_for('feed'))
+    return render_template('login.html')
+
+
+@application.route('/reset_pass/', methods = ['POST','GET'])
+def  reset_pass():
+    reset_db = client.flaka.pass_reset
+    code = random.randint(145346 , 976578)
+    code = str(code)
+    if request.method == "POST":
+        email = request.form['email']
+        existing = users.find_one({'email':email} )
+        if existing:
+
+            '''
+            Send message here with the co7de
+            '''
+            now = dt.now()
+            r_now =  now.strftime("Date  %Y:%m:%d: Time %H:%M:%S")
+            session['rset'] = email
+            if not reset_db.find_one({"email" : email}):
+                reset_db.insert_one({"email" : email , "code" : code , "time_in" : r_now})
+            return redirect(url_for('enter_code'))
+        else:
+            return redirect(url_for('register'))
+    return render_template('reset_pass.html')
+
+
+
+
+
+@application.route('/logout/' , methods = ['POST','GET'])
+@login_required
+def logout():
+    if request.method == "POST":
+        if request.form['sub'] == "Yes":
+            session.pop('login_user', None)
+            return redirect(url_for('login'))
+        else:
+            return redirect(url_for('feed'))
+    return render_template('logout.html')
+
+@application.route('/register/',methods = ['POST','GET'])
+def register():
+
+    if request.method == "POST":
+
+#        pic = request.files['img']
+
+        email = request.form['email']
+
+#        username =  request.form['username']
+
+        passc = request.form['passc']
+
+        passc2 = request.form['passc2']
+
+        hashed = Hash_passcode.hash(passc2)
+
+        registered = users.find_one({"email":email})
+        if registered:
+            mess = "You are already registered,please Log in"
+            return redirect(url_for('home'))
+        if passc == passc2  and not registered:
+          favs = []
+          tags = []
+          users.insert_one({"email":email  , "password":hashed ,"creator" : "no" , "verified" :0 ,
+ 'saved' : [], "viewed" :[] ,"posts" : 0  })
+
+          if users.find_one({"email":email}):
+                code = random.randint(145346 , 976578)
+                code = str(code)
+                session['login_user'] = email
+                if not verif.find_one({"email" : email}):
+                    verif.insert_one({"email" : email , "code" : code })
+                    #send the code Here
+                    send_mail(email,code)
+                    return redirect(url_for('complete_regist'))
+                else:
+                    return redirect(url_for('complete_regist'))
+
+
+
+    return render_template('register.html')
+
+
+
+@application.route('/complete_regist' , methods = ['POST' , 'GET'])
+def complete_regist():
+    user_email = session['login_user']
+    in_db = verif.find_one({"email" : user_email})
+    if request.method == "POST":
+        de_code = request.form['code']
+        if in_db:
+            code = str(in_db['code'])
+            if code == de_code:
+                users.find_one_and_update({"email" : user_email} ,{ '$set' :  {"verified": 1}} )
+                verif.find_one_and_delete({'email' : user_email})
+                return redirect(url_for('login'))
+            else:
+                print("Wrong Code")
+                time.sleep(2)
+                return redirect(url_for('complete_regist'))
+        else:
+            return redirect(url_for('register'))
+
+    return render_template('verif_reg.html' , m = user_email)
+
+
+
+@application.route('/profile/' , methods = ['POST','GET'])
+@login_required
+def profile():
+    trend = client.flaka.trending
+    me = session['login_user']
+    fl = me[0:6] + "****"
+    me2 = me.replace("." , "")
+    the_arr = ["electric car" , "rap" , "football"]
+    acc = users.find_one({"email" : me})
+
+    return render_template('profile.html' , me = fl  )
 
 
 

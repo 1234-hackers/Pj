@@ -171,10 +171,10 @@ Gold 40
         var intervalId; // Define intervalId in the global scope
         var startTime;
         var stopTime;
-        var stopImageIndex = 2; // Set the index of the image to be displayed after 3 seconds
+        var stopImageIndex = {{mp.ln}}; // Set the index of the image to be displayed after 3 seconds
 
-        img[0] = "{{ url_for('static', filename='imgs/one.png') }}";
-        img[1] = "{{ url_for('static', filename='imgs/three.jpeg') }}";
+        img[1] = "{{ url_for('static', filename='imgs/one.png') }}";
+        img[3] = "{{ url_for('static', filename='imgs/three.jpeg') }}";
         img[2] = "{{ url_for('static', filename='imgs/two.jpeg') }}";
 
         function img_change() {
