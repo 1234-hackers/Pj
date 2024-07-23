@@ -37,7 +37,6 @@
     </div>
     <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data"   >
   
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div >
     <input name="email"  placeholder="Phone Number" type="text" class="inputs">
     <br>

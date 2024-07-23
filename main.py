@@ -44,6 +44,7 @@ import secrets
 import os
 
 
+WTF_CSRF_SECRET_KEY = "kkdrkdooxoor38e88dixjrjsk"
 uri = "mongodb+srv://jackson:mutamuta@hbcall.ihz6j.azure.mongodb.net/test?retryWrites=true&w=majority" 
  # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
@@ -301,6 +302,7 @@ def feed():
 
 
 @application.route('/login/' , methods = ['POST','GET'])
+#@csrf.exempt
 def login():
     if request.method == "POST":# and  hcaptcha.verify():
         email = request.form['email']

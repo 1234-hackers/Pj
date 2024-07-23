@@ -1,6 +1,6 @@
 
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify ,session, redirect,url_for
 
 import dns.resolver
 dns.resolver.default_resolver=dns.resolver.Resolver(configure=False)
@@ -16,7 +16,9 @@ from datetime import  datetime as dt
 
 from functools import wraps
 
+
 from wtforms.csrf.session import SessionCSRF
+from flask_wtf.csrf import CSRFProtect,CSRFError
 
 import random
 import requests
@@ -31,14 +33,12 @@ uri = "mongodb+srv://jackson:mutamuta@hbcall.ihz6j.azure.mongodb.net/test?retryW
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
 
-
 application = Flask(__name__)
-
-#csrf = CSRFProtect(application)
-
 Hash_passcode = CryptContext(schemes=["sha256_crypt" ,"des_crypt"],sha256_crypt__min_rounds=131072)
-
 #mongo = PyMongo(application)
+
+application.secret_key = "Fucddggdgdfdgdrer5677u"
+
 
 users = client.bet.users
 pools = client.bet.pool_tables
@@ -63,20 +63,36 @@ def login_required(f):
 def submit():
     data = request.form.to_dict()
     # Process the data as needed
+    new_arr = []
+    userz = session["login_user"]
     response = {'message': 'Form data received successfully!', 'data': data}
+    gy = users.find_one({"email" : userz })
     num = int( response['data']['name'] )
-    print(num)
-    if data :
-         print("ryt" + str(data) )
+    print(str(response )+"  " + userz + str(gy))
+    """if not  gy["bets"] :
+         new_arr = []
+         new2 = new_arr + [num]
+    else:
+         new_arr = gy["bets"]
+         new2 = new_arr + [num]
+    print(new2)
+    now = dt.now()
+    now_c = now.strftime(" %Y:%m:%d ")
+    timez = now_c
+    if  not  userz  ==  " ":
+         print("ryt"+ userz  + str(data) )
+         de_user = users.find_one({"day": timez })
+         users.find_one_and_update({"email": userz}, {'$set': {"bets": new2}})
     else:
          print("fvk")
-
+     """
     return jsonify(response)
 
 
 
 
 @application.route('/',methods = ["POST","GET"])
+@login_required
 def home():
      gh=[]
      b_id =  secrets.token_hex(13)
@@ -166,11 +182,10 @@ def login():
                         if v == '0' :
                              return redirect(url_for('complete_regist'))
                         else:
-                            return redirect(url_for('feed'))
+                            return redirect(url_for('home'))
                     else:
-                        session.parmanent = True
                         session['login_user'] = email
-                        return redirect(url_for('feed'))
+                        return redirect(url_for('home'))
     return render_template('login.html')
 
 
@@ -209,22 +224,14 @@ def logout():
             session.pop('login_user', None)
             return redirect(url_for('login'))
         else:
-            return redirect(url_for('feed'))
+            return redirect(url_for('home'))
     return render_template('logout.html')
 
 @application.route('/register/',methods = ['POST','GET'])
 def register():
-
     if request.method == "POST":
-
-#        pic = request.files['img']
-
         email = request.form['email']
-
-#        username =  request.form['username']
-
         passc = request.form['passc']
-
         passc2 = request.form['passc2']
 
         hashed = Hash_passcode.hash(passc2)
@@ -234,10 +241,8 @@ def register():
             mess = "You are already registered,please Log in"
             return redirect(url_for('home'))
         if passc == passc2  and not registered:
-          favs = []
-          tags = []
-          users.insert_one({"email":email  , "password":hashed ,"creator" : "no" , "verified" :0 ,
- 'saved' : [], "viewed" :[] ,"posts" : 0  })
+          bets = []
+          users.insert_one({"email":email  , "password":hashed ,"bets":bets, "verified" :0   })
 
           if users.find_one({"email":email}):
                 code = random.randint(145346 , 976578)
@@ -246,7 +251,6 @@ def register():
                 if not verif.find_one({"email" : email}):
                     verif.insert_one({"email" : email , "code" : code })
                     #send the code Here
-                    send_mail(email,code)
                     return redirect(url_for('complete_regist'))
                 else:
                     return redirect(url_for('complete_regist'))
@@ -283,14 +287,12 @@ def complete_regist():
 @application.route('/profile/' , methods = ['POST','GET'])
 @login_required
 def profile():
-    trend = client.flaka.trending
     me = session['login_user']
-    fl = me[0:6] + "****"
-    me2 = me.replace("." , "")
-    the_arr = ["electric car" , "rap" , "football"]
+    fl = me[0:6] + "**"
     acc = users.find_one({"email" : me})
+    bets = acc["bets"]
 
-    return render_template('profile.html' , me = fl  )
+    return render_template('profile.html' , me = fl, bts = bets  )
 
 
 
