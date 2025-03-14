@@ -2,6 +2,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,27 +13,39 @@
 <title>Triple Threat</title>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#myForm').on('submit', function(event) {
-                event.preventDefault(); // Prevent the default form submission
-                var formData = $(this).serialize(); // Serialize form data
-                $.ajax({
-                    type: 'POST',
-                    url: '/submit',
-                    data: formData,
-                    success: function(response) {
-                        $('#response').html('<p>' + response.message + '</p>');
-                        console.log(response.data); // Log the response data for debugging
-                    },
-                    error: function(error) {
-                        $('#response').html('<p>An error occurred</p>');
-                        console.log(error); // Log the error for debugging
-                    }
-                });
+   
+
+<script>
+    $(document).ready(function() {
+        $('#myForm').on('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = $(this).serialize(); // Serialize form data
+            
+            // Disable the button once clicked
+            var playButton = $(".dapl");
+            playButton.prop("disabled", true); 
+
+            $.ajax({
+                type: 'POST',
+                url: '/submit',
+                data: formData,
+                success: function(response) {
+                    $('#response').html('<p>' + response.message + '</p>');
+                    console.log(response.data); // Log response data
+                },
+                error: function(error) {
+                    $('#response').html('<p>An error occurred</p>');
+                    console.log(error); // Log error
+                }
             });
         });
-    </script>
+    });
+
+    function handleButtonClick(button) {
+        startS(button);
+        button.disabled = true; // Disable button on click
+    }
+</script>
 
 
 <style>

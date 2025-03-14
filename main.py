@@ -9,7 +9,7 @@ dns.resolver.default_resolver.nameservers=['8.8.8.8']
 
 from dns.message import Message
 from flask import Flask, render_template, url_for, request, redirect,flash,session,jsonify
-from flask.scaffold import F
+
 from flask_pymongo import PyMongo
 from flask_wtf.form import FlaskForm
 from pymongo import MongoClient
@@ -155,6 +155,7 @@ def submit():
 
 
 @application.route('/',methods = ["POST","GET"])
+@login_required
 def home():
      gh=[]
      b_id =  secrets.token_hex(13)
@@ -302,7 +303,7 @@ def feed():
 
 
 @application.route('/login/' , methods = ['POST','GET'])
-#@csrf.exempt
+@csrf.exempt
 def login():
     if request.method == "POST":# and  hcaptcha.verify():
         email = request.form['email']
@@ -322,7 +323,7 @@ def login():
                     else:    
                         session.parmanent = True
                         session['login_user'] = email
-                        return redirect(url_for('feed'))
+                        return redirect(url_for('home'))
     return render_template('login.html')
 
 
