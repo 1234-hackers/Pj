@@ -62,6 +62,7 @@ application.config ['HCAPTCHA_SECRET_KEY'] = "hsec"
 SECRET_KEY = "dsfdsjgdjgdfgdfgjdkjgdg"
 csrf = CSRFProtect(application)
 
+
 #mongoDB configs
 #application.config['MONGO_DBNAME'] = 'users'
 # application.config['MONGO_URI'] = 'mongodb://'+ipst+':27017/users'
@@ -142,18 +143,42 @@ def index():
 
     return render_template('indexy.html')
 
-
-@application.route('/submit', methods=['POST'])
+"""
+@application.route('/submit', methods=["POST"])
+@csrf.exempt
 def submit():
-    data = request.form.to_dict()
-    # Process the data as needed
-    response = {'message': 'Form data received successfully!', 'data': data}
-    print(response['data']['name'])
-    return jsonify(response)
+    try:
+        data = request.json  # Expecting JSON data
+        if not data:
+            return jsonify({'error': 'No data received'}), 400
 
+        print(data)  # Debugging
+        name = data.get('name', 'Unknown')  # Extract name
+        print(f"Received name: {name}")
 
+        response = {'message': 'Form data received successfully!', 'data': data}
+        return jsonify(response), 200  # Return success response
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
+"""
 
+@application.route('/submit', methods=["POST"])
+def submit():
+    try:
+        csrf_token = request.headers.get("X-CSRFToken")
+
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data received or invalid JSON'}), 400
+
+        print("Parsed JSON:", data)
+        response = {'message': 'Form data received successfully!', 'data': data}
+        return jsonify(response), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    return redirect(url_for("home"))
 @application.route('/',methods = ["POST","GET"])
 @login_required
 def home():

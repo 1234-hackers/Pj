@@ -15,38 +15,43 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    
 
+
+
 <script>
     $(document).ready(function() {
         $('#myForm').on('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
-            var formData = $(this).serialize(); // Serialize form data
             
-            // Disable the button once clicked
-            var playButton = $(".dapl");
-            playButton.prop("disabled", true); 
+            var formData = {};
+            $(this).serializeArray().forEach(function(item) {
+                formData[item.name] = item.value;
+            });
+
+            // Get CSRF token from the hidden input field
+            var csrfToken = $('input[name="csrf_token"]').val();
 
             $.ajax({
                 type: 'POST',
-                url: '/submit',
-                data: formData,
+                url: 'http://localhost:5006/submit',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                dataType: 'json',
+                headers: {
+                    "X-CSRFToken": csrfToken // Send CSRF token in headers
+                },
                 success: function(response) {
                     $('#response').html('<p>' + response.message + '</p>');
-                    console.log(response.data); // Log response data
+                    console.log("Response:", response);
                 },
-                error: function(error) {
-                    $('#response').html('<p>An error occurred</p>');
-                    console.log(error); // Log error
+                error: function(xhr, status, error) {
+                    console.log("Error Status:", status);
+                    console.log("XHR Response:", xhr.responseText);
+                    $('#response').html('<p>An error occurred: ' + xhr.responseText + '</p>');
                 }
             });
         });
     });
-
-    function handleButtonClick(button) {
-        startS(button);
-        button.disabled = true; // Disable button on click
-    }
 </script>
-
 
 <style>
         .radio-button-container {
@@ -136,8 +141,11 @@ Gold 40
 </div>
 
 <div class="btbs">
-    <form id="myForm">
+    <form id="myForm" action="{{ url_for('submit') }}">
+
 	<div id="playForm"> 
+<input type="hidden" name="csrf_token" value={{ csrf_token() }}>
+
 
 	<input type="radio" id="option1" name="options" style="display:none;"  value="1">
         <label for="option1"  class="playbutton"> 1 </label>
