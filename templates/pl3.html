@@ -13,46 +13,24 @@
 <title>Triple Threat</title>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $(document).ready(function () {
         var playButton = $(".dapl");
 
-        // Check localStorage to see if the button should be disabled
+        // Check if the button should be disabled from localStorage
         if (localStorage.getItem("playButtonDisabled") === "true") {
             playButton.prop("disabled", true).css("background-color", "gray").css("cursor", "not-allowed");
         }
 
-        playButton.click(function () {
-            $(this).prop("disabled", true).css("background-color", "gray").css("cursor", "not-allowed");
-
-            // Store the disabled state in localStorage
-            localStorage.setItem("playButtonDisabled", "true");
-
-            // Start the image change function
-            startS(this);
-        });
-
-        // Reset button state on page refresh
-        $(window).on("beforeunload", function () {
-            localStorage.removeItem("playButtonDisabled");
-        });
-    });
-</script>
-   
-
-
-
-<script>
-    $(document).ready(function() {
-        $('#myForm').on('submit', function(event) {
+        $("#myForm").on("submit", function (event) {
             event.preventDefault(); // Prevent default form submission
-            
+
             var formData = {};
-            $(this).serializeArray().forEach(function(item) {
+            $(this).serializeArray().forEach(function (item) {
                 formData[item.name] = item.value;
             });
 
-            // Get CSRF token from the hidden input field
             var csrfToken = $('input[name="csrf_token"]').val();
 
             $.ajax({
@@ -62,21 +40,35 @@
                 contentType: 'application/json',
                 dataType: 'json',
                 headers: {
-                    "X-CSRFToken": csrfToken // Send CSRF token in headers
+                    "X-CSRFToken": csrfToken
                 },
-                success: function(response) {
+                success: function (response) {
                     $('#response').html('<p>' + response.message + '</p>');
                     console.log("Response:", response);
+
+                    // Disable the button only after successful submission
+                    playButton.prop("disabled", true).css("background-color", "gray").css("cursor", "not-allowed");
+                    localStorage.setItem("playButtonDisabled", "true");
+
+                    // Start the image transition after successful AJAX call
+                    startS(playButton[0]);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.log("Error Status:", status);
                     console.log("XHR Response:", xhr.responseText);
                     $('#response').html('<p>An error occurred: ' + xhr.responseText + '</p>');
                 }
             });
         });
+
+        // Reset button state on page refresh
+        $(window).on("beforeunload", function () {
+            localStorage.removeItem("playButtonDisabled");
+        });
     });
 </script>
+
+
 
 <style>
         .radio-button-container {
