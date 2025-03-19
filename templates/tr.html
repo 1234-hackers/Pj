@@ -1,8 +1,4 @@
 
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +9,8 @@
 <title>Triple Threat</title>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 <script>
     $(document).ready(function () {
         var playButton = $(".dapl");
@@ -38,15 +36,13 @@
         });
     });
 </script>
-   
-
 
 
 <script>
     $(document).ready(function() {
         $('#myForm').on('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
-            
+
             var formData = {};
             $(this).serializeArray().forEach(function(item) {
                 formData[item.name] = item.value;
@@ -134,40 +130,16 @@
         cursor: not-allowed;
     }
 </style>
-<style>
-        .btn {
-            font-size: 17px;
-            color: blue;
-            background-color: yellow;
-	    margin-left : 10px;
-            border: none;
-            cursor: pointer;
-	    border-radius: 5px;
-            text-decoration: none;
-        }
-
- 	
-        .btn2 {
-            font-size: 17px;
-	    
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-    </style>
-
 </head>
 <body class="bd">
 <div class="container"></div>
 
 <div class="balance"> 
-<button class="btn" > <a href="{{ url_for('submit') }}" class="btn2">Account </a> </button> 
-
-<button class="btn" > <a href="{{ url_for('submit') }}" class="btn2"  > Deposit </a> </button>
-
-<button class="btn" > <a href="{{ url_for('submit') }}" class="btn2"  >Log Out </a> </button>
- 
+Bronze 500
+<br>
+Silver 100
+<br>
+Gold 40
 </div>
 
 <div class="site_pic">
@@ -178,9 +150,10 @@
         </a>
     </label>
     <br>
-   NB. Refresh Page For Next Draw
+    {{ mp }}
 <br>
 <br>
+ {{mp.ln / 458}}
     <h1 class="waka2">Tripple Threat</h1>
 </div>
 
@@ -191,34 +164,34 @@
 <div class="btbs">
     <form id="myForm" action="{{ url_for('submit') }}">
 
-	<div id="playForm"> 
+        <div id="playForm"> 
 <input type="hidden" name="csrf_token" value={{ csrf_token() }}>
 
 
-	<input type="radio" id="option1" name="options" style="display:none;"  value="1">
+        <input type="radio" id="option1" name="options" style="display:none;"  value="1">
         <label for="option1"  class="playbutton"> 1 </label>
 
 
-	<input type="radio" style="display:none;"  id="option2" name="options" value="2">
+        <input type="radio" style="display:none;"  id="option2" name="options" value="2">
         <label for="option2"  class="playbutton1"> 2 </label>
 
-	
-	<input style="display:none;"  type="radio" id="option3" name="options" value="3">
-        <label for="option3"  class="playbutton2"> 3 </label>	
+
+        <input style="display:none;"  type="radio" id="option3" name="options" value="3">
+        <label for="option3"  class="playbutton2"> 3 </label>        
 
 
-	<br>
+        <br>
         <input type="hidden" id="name" name="name" value="{{mp.ln}}">
         <br>
         <input type="hidden" id="email" name="email"  value="{{mp.ln}}">
         <br>
-        
- 
- 	<button type="submit" onclick="handleButtonClick()" data-value="5"  class="dapl" >Play</button>
+
+
+         <button type="submit" onclick="handleButtonClick()" data-value="5"  class="dapl"  >Play</button>
     </form>
 
    </div>
- 
+
 </div>
 
 <div class="scrolling-names">
