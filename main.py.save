@@ -165,7 +165,12 @@ def submit():
 
         print("Parsed JSON:", data)
         print(name)
-        users.find_one({"email":name})
+        bts = users.find_one({"email":name})
+        bts1 = bts["bets"]
+	bts1.append(bts1)
+	users.find_one_and_update(
+	{"email":"name"}, {"$set": {"bets": bts1}}
+	)
         response = {'message': 'Form data received successfully!', 'data': data}
         return jsonify(response), 200
 

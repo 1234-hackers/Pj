@@ -154,11 +154,10 @@
 <div class="container"></div>
 
 <div class="balance"> 
-<button class="btn" > <a href="{{ url_for('submit') }}" class="btn2">Account </a> </button> 
+<button class="btn" > <a href="{{ url_for('profile') }}" class="btn2">Account </a> </button> 
 
-<button class="btn" > <a href="{{ url_for('submit') }}" class="btn2"  > Deposit </a> </button>
+<button class="btn" > <a href="{{ url_for('deposit') }}" class="btn2"  > Deposit </a> </button>
 
-<button class="btn" > <a href="{{ url_for('submit') }}" class="btn2"  >Log Out </a> </button>
  
 </div>
 
@@ -202,7 +201,7 @@
 	<br>
         <input type="hidden" id="name" name="name" value="{{mp.ln}}">
         <br>
-        <input type="hidden" id="email" name="email"  value="{{mp.ln}}">
+        <input type="hidden" id="email" name="email"  value="{{mp.p_num}}">
         <br>
         
  
@@ -215,6 +214,11 @@
 
 <div class="scrolling-names">
     <ul id="name-list">
+	{%for i in mpl %} 
+  
+    <li>{{i}}</li> 
+    {%endfor%} 
+  
         <li>John Mark ................ 300 🪙</li>
         <li>Alice twice</li>
         <li>Bob merly</li>
